@@ -1,7 +1,7 @@
-class Products {
+class ProductsModel {
   String productName, productPrice;
 
-  Products({this.productName, this.productPrice});
+  ProductsModel({this.productName, this.productPrice});
 
   set setProductName(String name) => this.productName = name;
 

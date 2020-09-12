@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:products_app/providers/category_provider.dart';
 import 'package:products_app/providers/drawer_provider.dart';
 import 'package:products_app/screens/home_screen.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => DrawerProvider(AppStateEnum.PRODUCT),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => CategoryProvider(),
         )
       ],
       child: MaterialApp(

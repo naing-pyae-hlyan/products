@@ -33,10 +33,10 @@ class ProductScreen extends StatelessWidget {
   }
 
   Widget _sliverListWidget(BuildContext context) {
-    List<Products> products = new List<Products>();
+    List<ProductsModel> products = new List<ProductsModel>();
 
     for (int i = 0; i < 12; i++) {
-      Products product = Products(productName: 'A$i', productPrice: '$i.00');
+      ProductsModel product = ProductsModel(productName: 'A$i', productPrice: '$i.00');
       products.add(product);
     }
 
@@ -48,7 +48,7 @@ class ProductScreen extends StatelessWidget {
     );
   }
 
-  Widget _listTiles(BuildContext context, List<Products> products, int index) {
+  Widget _listTiles(BuildContext context, List<ProductsModel> products, int index) {
     return Card(
       margin: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
       shadowColor: Colors.grey[200],

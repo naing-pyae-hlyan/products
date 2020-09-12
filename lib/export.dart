@@ -13,8 +13,10 @@ export 'package:products_app/utils/text_utils.dart';
 export 'package:products_app/utils/themes_color.dart';
 
 // widgets
+export 'package:products_app/widgets/category_bottom_sheet.dart';
+export 'package:products_app/widgets/category_bottom_sheet_items.dart';
 export 'package:products_app/widgets/products_bottom_sheet.dart';
-export 'package:products_app/widgets/bottom_sheet_items.dart';
+export 'package:products_app/widgets/products_bottom_sheet_items.dart';
 export 'package:products_app/widgets/round_button.dart';
 
 // enum

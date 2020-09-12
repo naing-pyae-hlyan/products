@@ -19,10 +19,13 @@ class CategoryScreen extends StatelessWidget {
   }
 
   Widget _sliverGridWidget(BuildContext context) {
-    List<Category> categoryList = new List();
 
-    for (int i = 1; i < 13; i++) {
-      Category c = Category(category: 'Category $i');
+
+
+    List<CategoryModel> categoryList = new List();
+
+    for (int i = 1; i < 3; i++) {
+      CategoryModel c = CategoryModel(categoryName: 'Category $i');
       categoryList.add(c);
     }
 
@@ -32,36 +35,38 @@ class CategoryScreen extends StatelessWidget {
       delegate:
           new SliverChildBuilderDelegate((BuildContext context, int index) {
 
-            print(index);
-            if(categoryList.length == index){
-              return _addGridNewCategory(context);
-            } else {
-              return _gridCategory(context, categoryList, index);
-            }
+        if (categoryList.length == index) {
+          return _addGridNewCategory(context);
+        } else {
+          return _gridCategory(context, categoryList, index);
+        }
       }, childCount: categoryList.length + 1),
     );
   }
 
   Widget _gridCategory(
-      BuildContext context, List<Category> category, int index) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-      shadowColor: Colors.grey[200],
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(height: 8.0),
-          CircleAvatar(
-            backgroundColor: ThemesColor.randomColor(),
-            radius: 32,
-          ),
-          SizedBox(height: 8.0),
-          Expanded(flex: 3, child: Text('${category[index].category}')),
-          SizedBox(height: 8.0)
-        ],
+      BuildContext context, List<CategoryModel> category, int index) {
+    return InkWell(
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+        shadowColor: Colors.grey[200],
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 8.0),
+            CircleAvatar(
+              backgroundColor: ThemesColor.randomColor(),
+              radius: 32,
+            ),
+            SizedBox(height: 8.0),
+            Expanded(flex: 3, child: Text('${category[index].categoryName}')),
+            SizedBox(height: 8.0)
+          ],
+        ),
       ),
+      onLongPress: () {},
     );
   }
 
@@ -74,7 +79,9 @@ class CategoryScreen extends StatelessWidget {
           color: ThemesColor.primaryColor,
           splashColor: ThemesColor.primaryColor,
           icon: Icon(Icons.add, size: 48),
-          onPressed: () {},
+          onPressed: () {
+            categoryBottomSheet(context);
+          },
         ));
   }
 }

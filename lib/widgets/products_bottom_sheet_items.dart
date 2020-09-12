@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:products_app/export.dart';
 
-class BottomSheetItems extends StatefulWidget {
+class ProductsBottomSheetItems extends StatefulWidget {
   @override
-  _BottomSheetItemsState createState() => _BottomSheetItemsState();
+  _ProductsBottomSheetItemsState createState() => _ProductsBottomSheetItemsState();
 }
 
-class _BottomSheetItemsState extends State<BottomSheetItems> {
+class _ProductsBottomSheetItemsState extends State<ProductsBottomSheetItems> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,10 +40,10 @@ class _BottomSheetItemsState extends State<BottomSheetItems> {
   }
 
   Widget _dropDownCategory(BuildContext context) {
-    List<Category> categoryList = List<Category>();
+    List<CategoryModel> categoryList = List<CategoryModel>();
 
     for (int i = 0; i < 4; i++) {
-      Category category = Category(category: 'Category ${i + 1}');
+      CategoryModel category = CategoryModel(categoryName: 'Category ${i + 1}');
       categoryList.add(category);
     }
 
@@ -54,7 +54,7 @@ class _BottomSheetItemsState extends State<BottomSheetItems> {
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: DropdownButtonHideUnderline(
-        child: DropdownButton<Category>(
+        child: DropdownButton<CategoryModel>(
           isExpanded: true,
           value: categoryList[0],
           items: _dropDownMenuItems(context, items: categoryList),
@@ -66,12 +66,12 @@ class _BottomSheetItemsState extends State<BottomSheetItems> {
     );
   }
 
-  List<DropdownMenuItem<Category>> _dropDownMenuItems(BuildContext context,
-      {List<Category> items}) {
-    List<DropdownMenuItem<Category>> widget = List();
-    for (Category item in items) {
+  List<DropdownMenuItem<CategoryModel>> _dropDownMenuItems(BuildContext context,
+      {List<CategoryModel> items}) {
+    List<DropdownMenuItem<CategoryModel>> widget = List();
+    for (CategoryModel item in items) {
       widget.add(DropdownMenuItem(
-        child: Text(item.category, style: TextStyle(color: Colors.grey[700])),
+        child: Text(item.categoryName, style: TextStyle(color: Colors.grey[700])),
         value: item,
       ));
     }

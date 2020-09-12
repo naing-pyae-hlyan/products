@@ -10,7 +10,7 @@ void productsBottomSheet(BuildContext context) {
           builder: (BuildContext context) {
             return Wrap(
               children: [
-                BottomSheetItems()
+                ProductsBottomSheetItems()
               ],
             );
           }));

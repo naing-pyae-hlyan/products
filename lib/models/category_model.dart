@@ -1,7 +1,15 @@
-class Category {
-  String category;
+import 'package:products_app/data/category_table.dart';
 
-  Category({this.category});
+class CategoryModel {
+  String categoryName;
 
-  set setCategory(String item) => this.category = item;
+  CategoryModel({this.categoryName});
+
+  set setCategory(String item) => this.categoryName = item;
+
+  Map<String, dynamic> toMap() {
+    return {
+      CATEGORY_NAME : categoryName
+    };
+  }
 }
