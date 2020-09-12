@@ -46,8 +46,8 @@ class _CategoryBottomSheetItemsState extends State<CategoryBottomSheetItems> {
           _categoryInput(context, text: 'Category Name'),
           SizedBox(height: 16.0),
           roundButton(context, text: 'Save Category', onPress: () {
-            _saveCategory(context);
-            widget.callback.call();
+            _saveCategory(context, widget.callback);
+            // widget.callback.call();
           }),
           SizedBox(height: 16.0),
         ],
@@ -69,9 +69,13 @@ class _CategoryBottomSheetItemsState extends State<CategoryBottomSheetItems> {
     );
   }
 
-  Future<void> _saveCategory(BuildContext context) async {
-    CategoryModel category = new CategoryModel(categoryName: _controller.text);
-    await CategoryTable.insert(category);
-    Navigator.pop(context);
+  Future<void> _saveCategory(BuildContext context, VoidCallback callback) async {
+    if(_controller.text.isNotEmpty) {
+      CategoryModel category = new CategoryModel(
+          categoryName: _controller.text);
+      await CategoryTable.insert(category);
+      callback.call();
+      Navigator.pop(context);
+    }
   }
 }
