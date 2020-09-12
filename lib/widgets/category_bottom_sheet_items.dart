@@ -3,6 +3,10 @@ import 'package:products_app/data/category_table.dart';
 import 'package:products_app/export.dart';
 
 class CategoryBottomSheetItems extends StatefulWidget {
+  final VoidCallback callback;
+
+  CategoryBottomSheetItems({this.callback});
+
   @override
   _CategoryBottomSheetItemsState createState() =>
       _CategoryBottomSheetItemsState();
@@ -41,8 +45,10 @@ class _CategoryBottomSheetItemsState extends State<CategoryBottomSheetItems> {
           SizedBox(height: 16.0),
           _categoryInput(context, text: 'Category Name'),
           SizedBox(height: 16.0),
-          roundButton(context,
-              text: 'Save Category', onPress: () => _saveCategory(context)),
+          roundButton(context, text: 'Save Category', onPress: () {
+            _saveCategory(context);
+            widget.callback.call();
+          }),
           SizedBox(height: 16.0),
         ],
       ),
@@ -52,6 +58,7 @@ class _CategoryBottomSheetItemsState extends State<CategoryBottomSheetItems> {
   Widget _categoryInput(BuildContext context, {@required String text}) {
     return TextFormField(
       controller: _controller,
+      autofocus: true,
       decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(left: 16.0, right: 16.0),
           labelText: text,
@@ -63,8 +70,8 @@ class _CategoryBottomSheetItemsState extends State<CategoryBottomSheetItems> {
   }
 
   Future<void> _saveCategory(BuildContext context) async {
-    print('${_controller.text}');
     CategoryModel category = new CategoryModel(categoryName: _controller.text);
     await CategoryTable.insert(category);
+    Navigator.pop(context);
   }
 }

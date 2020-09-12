@@ -1,5 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:products_app/export.dart';
+import 'package:products_app/providers/category_provider.dart';
+import 'package:products_app/providers/refresh_provider.dart';
+import 'package:provider/provider.dart';
+
+class BaseCategoryScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => RefreshProvider(),
+        )
+      ],
+      child: CategoryScreen(),
+    );
+  }
+}
 
 class CategoryScreen extends StatelessWidget {
   @override
@@ -19,29 +36,41 @@ class CategoryScreen extends StatelessWidget {
   }
 
   Widget _sliverGridWidget(BuildContext context) {
+    final categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
 
+    return Consumer<RefreshProvider>(
+        builder: (context, refreshProvider, child) {
+      return FutureBuilder(
+        future: categoryProvider.category,
+        builder: (BuildContext context,
+            AsyncSnapshot<List<CategoryModel>> snapshot) {
+          if (snapshot.hasError) {
+            return SliverToBoxAdapter(
+                child: Center(child: Text('${snapshot.error}')));
+          }
 
-
-    List<CategoryModel> categoryList = new List();
-
-    for (int i = 1; i < 3; i++) {
-      CategoryModel c = CategoryModel(categoryName: 'Category $i');
-      categoryList.add(c);
-    }
-
-    return new SliverGrid(
-      gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-      delegate:
-          new SliverChildBuilderDelegate((BuildContext context, int index) {
-
-        if (categoryList.length == index) {
-          return _addGridNewCategory(context);
-        } else {
-          return _gridCategory(context, categoryList, index);
-        }
-      }, childCount: categoryList.length + 1),
-    );
+          if (snapshot.hasData) {
+            // List<CategoryModel> categoryList = List();
+            if (snapshot.data is List<CategoryModel>) {
+              return SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3),
+                  delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                    if (snapshot.data.length == index) {
+                      return _addGridNewCategory(context);
+                    } else {
+                      return _gridCategory(context, snapshot.data, index);
+                    }
+                  }, childCount: snapshot.data.length + 1));
+            }
+          }
+          return SliverToBoxAdapter(
+              child: Center(child: CircularProgressIndicator()));
+        },
+      );
+    });
   }
 
   Widget _gridCategory(
@@ -80,7 +109,10 @@ class CategoryScreen extends StatelessWidget {
           splashColor: ThemesColor.primaryColor,
           icon: Icon(Icons.add, size: 48),
           onPressed: () {
-            categoryBottomSheet(context);
+            categoryBottomSheet(context,
+                callback: () =>
+                    Provider.of<RefreshProvider>(context, listen: false)
+                        .refresh());
           },
         ));
   }

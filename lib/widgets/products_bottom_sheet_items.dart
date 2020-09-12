@@ -32,7 +32,9 @@ class _ProductsBottomSheetItemsState extends State<ProductsBottomSheetItems> {
           SizedBox(height: 16.0),
           _editText(context, text: 'Product Price'),
           SizedBox(height: 16.0),
-          roundButton(context, text: 'Save Product', onPress: () {}),
+          roundButton(context, text: 'Save Product', onPress: () {
+            Navigator.pop(context);
+          }),
           SizedBox(height: 8.0),
         ],
       ),

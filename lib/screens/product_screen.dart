@@ -1,5 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:products_app/export.dart';
+import 'package:products_app/providers/refresh_provider.dart';
+import 'package:provider/provider.dart';
+
+
+class BaseProductScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => RefreshProvider(),
+        )
+      ],
+      child: ProductScreen(),
+    );
+  }
+}
 
 class ProductScreen extends StatelessWidget {
   @override

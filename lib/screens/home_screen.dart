@@ -14,11 +14,11 @@ class HomeScreen extends StatelessWidget {
           Widget body;
           switch (drawerProvider.getState) {
             case AppStateEnum.PRODUCT:
-              body = ProductScreen();
+              body = BaseProductScreen();
               break;
 
             case AppStateEnum.CATEGORY:
-              body = CategoryScreen();
+              body = BaseCategoryScreen();
               break;
           }
           return body;

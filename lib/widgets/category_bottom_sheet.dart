@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:products_app/export.dart';
 
-void categoryBottomSheet(BuildContext context) {
+void categoryBottomSheet(BuildContext context, {VoidCallback callback}) {
   Future.delayed(
       Duration.zero,
       () => showDialog(context: context,
@@ -13,7 +13,7 @@ void categoryBottomSheet(BuildContext context) {
             ),
             child: Wrap(
               children: [
-                CategoryBottomSheetItems()
+                CategoryBottomSheetItems(callback: callback)
               ],
             ));
   }));
