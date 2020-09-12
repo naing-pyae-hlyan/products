@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:random_color/random_color.dart';
 class ThemesColor {
   static MaterialColor primaryColor = const MaterialColor(
     0xFF7ECDC4,
@@ -15,4 +16,13 @@ class ThemesColor {
       900: Color(0xFF7ECDC4),
     },
   );
+
+  static Color generateRandomColor({ColorHue colorHue}) {
+    RandomColor _randomColor = RandomColor();
+    return _randomColor.randomColor(colorHue: colorHue);
+  }
+  static Color randomColor() {
+    RandomColor _randomColor = RandomColor();
+    return _randomColor.randomColor(colorHue: ColorHue.blue);
+  }
 }
