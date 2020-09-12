@@ -1,0 +1,4 @@
+enum AppStateEnum {
+  PRODUCT,
+  CATEGORY
+}
