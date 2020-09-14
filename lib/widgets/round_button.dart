@@ -11,7 +11,7 @@ Widget roundButton(BuildContext context,
         borderRadius: BorderRadius.circular(12.0),
       ),
       color: ThemesColor.primaryColor,
-      child: Text(text, style: TextStyle(fontWeight: FontWeight.bold),),
+      child: Text(text, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
       onPressed: onPress,
     ),
   );

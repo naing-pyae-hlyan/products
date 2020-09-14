@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:products_app/export.dart';
 import 'package:products_app/providers/cart_badge_provider.dart';
+import 'package:products_app/providers/cart_provider.dart';
 import 'package:products_app/providers/products_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -82,7 +83,9 @@ class ProductItems extends StatelessWidget {
 
   Widget _listTileAddToCard(
       BuildContext context, List<ProductsModel> productList, int index) {
-    final badgeProvider = Provider.of<CartBadgeProvider>(context, listen: false);
+    final badgeProvider =
+        Provider.of<CartBadgeProvider>(context, listen: false);
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,7 +107,8 @@ class ProductItems extends StatelessWidget {
           icon: Icon(Icons.add_shopping_cart, size: 16),
           color: ThemesColor.primaryColor,
           onPressed: () {
-            badgeProvider.increaseBadge();
+            cartProvider.setProducts(productList[index]);
+            // badgeProvider.increaseBadge();
           },
         )
       ],
