@@ -48,35 +48,60 @@ class ProductItems extends StatelessWidget {
 
   Widget _horizontalListTiles(
       BuildContext context, List<ProductsModel> productList, int index) {
-    return Card(
-      shadowColor: Colors.grey[200],
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Container(
-        width: MediaQuery.of(context).size.width / 3.1,
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            CircleAvatar(
-              backgroundColor: ThemesColor.randomColor(),
-              child: Text('${productList[index].productName[0].toUpperCase()}'),
-            ),
-            Spacer(),
-            Flexible(
-              child: Text(
-                '${productList[index].productName}',
-                style: TextStyle(fontSize: 12),
+    return InkWell(
+      child: Card(
+        shadowColor: Colors.grey[200],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Container(
+          width: MediaQuery.of(context).size.width / 2.5,
+          padding: const EdgeInsets.only(bottom: 8, left: 8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              CircleAvatar(
+                backgroundColor: ThemesColor.randomColor(),
+                child: Text('${productList[index].productName[0].toUpperCase()}'),
               ),
+              // Spacer(),
+              _listTileAddToCard(context, productList, index)
+            ],
+          ),
+        ),
+      ),
+      onTap: (){
+        // TODO details of item
+      },
+    );
+  }
+
+  Widget _listTileAddToCard(
+      BuildContext context, List<ProductsModel> productList, int index) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${productList[index].productName}',
+              style: TextStyle(fontSize: 12),
             ),
             Text(
-              '${productList[index].productPrice}',
+              '${productList[index].productPrice} MMK',
               style: TextStyle(fontSize: 10),
             )
           ],
         ),
-      ),
+        IconButton(
+          icon: Icon(Icons.add_shopping_cart, size: 16),
+          color: ThemesColor.primaryColor,
+          onPressed: () {
+            // TODO add to cart
+          },
+        )
+      ],
     );
   }
 }

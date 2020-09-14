@@ -25,7 +25,7 @@ class DrawerScreen extends StatelessWidget {
           // ),
           ListTile(
             title: Text('Products'),
-            leading: Icon(Icons.add_shopping_cart),
+            leading: Icon(Icons.shopping_cart),
             onTap: () {
               drawerProvider.change(enumState: AppStateEnum.PRODUCT);
               Navigator.pop(context);
