@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:products_app/export.dart';
+import 'package:products_app/providers/category_provider.dart';
 import 'package:products_app/providers/refresh_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +23,7 @@ class ProductScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-        slivers: <Widget>[_sliverAppBar(context), _sliverListWidget(context)],
+        slivers: <Widget>[_sliverAppBar(context), _futureSliverList(context)],
       ),
       drawer: DrawerScreen(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -42,27 +43,58 @@ class ProductScreen extends StatelessWidget {
     );
   }
 
-  Widget _sliverListWidget(BuildContext context) {
-    List<ProductsModel> products = new List<ProductsModel>();
-    for (int i = 0; i < 12; i++) {
-      ProductsModel product =
-          ProductsModel(productName: 'A$i', productPrice: '$i.00');
-      products.add(product);
-    }
+  Widget _futureSliverList(BuildContext context) {
+    final categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
+
+    return FutureBuilder(
+      future: categoryProvider.category,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<CategoryModel>> snapshot) {
+        if (snapshot.hasError) {
+          return SliverToBoxAdapter(child: Container());
+        }
+        if (snapshot.hasData) {
+          if (snapshot.data is List<CategoryModel>) {
+            return _sliverListWidget(context, snapshot.data);
+          }
+        }
+        return SliverToBoxAdapter(child: Container());
+      },
+    );
+  }
+
+  Widget _sliverListWidget(
+      BuildContext context, List<CategoryModel> categoryList) {
     return SliverList(
       delegate:
           new SliverChildBuilderDelegate((BuildContext context, int index) {
-            return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomText.headerText('Product 1', color: Colors.grey),
-                  ProductItems(),
-                ],
-              ),
-            );
-      }, childCount: 5),
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _productsHeaderRow(context, categoryList, index),
+              ProductItems(),
+            ],
+          ),
+        );
+      }, childCount: categoryList.length),
+    );
+  }
+
+  Widget _productsHeaderRow(
+      BuildContext context, List<CategoryModel> categoryList, int index) {
+    return Row(
+      children: [
+        CircleAvatar(
+            backgroundColor:
+                ThemesColor.colorConvert(categoryList[index].categoryColor),
+            radius: 8),
+        SizedBox(width: 8),
+        CustomText.headerText('${categoryList[index].categoryName}',
+            color: Colors.grey),
+      ],
     );
   }
 
