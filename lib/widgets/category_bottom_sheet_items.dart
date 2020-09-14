@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:products_app/data/category_table.dart';
 import 'package:products_app/export.dart';
+import 'package:products_app/providers/category_provider.dart';
 import 'package:products_app/providers/refresh_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -98,11 +98,14 @@ class _CategoryBottomSheetItemsState extends State<CategoryBottomSheetItems> {
 
   Future<void> _saveCategory(
       BuildContext context, VoidCallback callback) async {
+    final categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
+
     if (_controller.text.isNotEmpty) {
       CategoryModel category = new CategoryModel(
           categoryName: _controller.text,
           categoryColor: '${_randomColor.value.toRadixString(16)}');
-      await CategoryTable.insert(category);
+      await categoryProvider.insert(category);
       callback.call();
       Navigator.pop(context);
     }

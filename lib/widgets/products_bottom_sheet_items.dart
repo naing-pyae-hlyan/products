@@ -1,15 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:products_app/export.dart';
-import 'package:products_app/providers/category_provider.dart';
+import 'package:products_app/providers/products_provider.dart';
 import 'package:provider/provider.dart';
 
 class ProductsBottomSheetItems extends StatefulWidget {
+  final List<CategoryModel> categories;
+  final VoidCallback callback;
+
+  ProductsBottomSheetItems({this.categories, this.callback});
+
   @override
   _ProductsBottomSheetItemsState createState() =>
       _ProductsBottomSheetItemsState();
 }
 
 class _ProductsBottomSheetItemsState extends State<ProductsBottomSheetItems> {
+  final _pNameController = TextEditingController();
+  final _pPriceController = TextEditingController();
+  String _dropDownValue;
+  CategoryModel _selectedCategory;
+
+  @override
+  void setState(fn) {
+    super.setState(fn);
+  }
+
+  @override
+  void dispose() {
+    _pNameController.dispose();
+    _pPriceController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,38 +45,18 @@ class _ProductsBottomSheetItemsState extends State<ProductsBottomSheetItems> {
           SizedBox(height: 16.0),
           CustomText.headerText('Add Product'),
           SizedBox(height: 16.0),
-          _futureDropDown(context),
+          _dropDownCategory(context, widget.categories),
           SizedBox(height: 16.0),
-          _editText(context, text: 'Product Name'),
+          _productNameInputForm(context, text: 'Product Name'),
           SizedBox(height: 16.0),
-          _editText(context, text: 'Product Price'),
+          _productPriceInputForm(context, text: 'Product Price'),
           SizedBox(height: 16.0),
           roundButton(context, text: 'Save Product', onPress: () {
-            Navigator.pop(context);
+            _saveProducts(context, widget.callback);
           }),
           SizedBox(height: 8.0),
         ],
       ),
-    );
-  }
-
-  Widget _futureDropDown(BuildContext context) {
-    final categoryProvider =
-        Provider.of<CategoryProvider>(context, listen: false);
-    return FutureBuilder(
-      future: categoryProvider.category,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<CategoryModel>> snapshot) {
-        if (snapshot.hasError) {
-          return Container();
-        }
-        if (snapshot.hasData) {
-          if (snapshot.data is List<CategoryModel>) {
-            return _dropDownCategory(context, snapshot.data);
-          }
-        }
-        return Container();
-      },
     );
   }
 
@@ -69,39 +71,41 @@ class _ProductsBottomSheetItemsState extends State<ProductsBottomSheetItems> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<CategoryModel>(
           isExpanded: true,
-          value: categoryList[0],
-          items: _dropDownMenuItems(context, items: categoryList),
-          onChanged: (value) {
-            print(value);
+          value: _selectedCategory,
+          onChanged: (CategoryModel value) {
+            setState(() {
+              _dropDownValue = value.categoryName;
+              _selectedCategory = value;
+            });
           },
+          items: categoryList.map((CategoryModel category) {
+            return _dropdownMenuItem(context, category);
+          }).toList(),
         ),
       ),
     );
   }
 
-  List<DropdownMenuItem<CategoryModel>> _dropDownMenuItems(BuildContext context,
-      {List<CategoryModel> items}) {
-    List<DropdownMenuItem<CategoryModel>> widget = List();
-    for (CategoryModel item in items) {
-      widget.add(DropdownMenuItem(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(item.categoryName, style: TextStyle(color: Colors.grey[700])),
-            CircleAvatar(
-              radius: 12,
-              backgroundColor: ThemesColor.colorConvert(item.categoryColor),
-            ),
-          ],
-        ),
-        value: item,
-      ));
-    }
-    return widget;
+  DropdownMenuItem<CategoryModel> _dropdownMenuItem(
+      BuildContext context, CategoryModel item) {
+    return DropdownMenuItem(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(item.categoryName, style: TextStyle(color: Colors.grey[700])),
+          CircleAvatar(
+            radius: 12,
+            backgroundColor: ThemesColor.colorConvert(item.categoryColor),
+          ),
+        ],
+      ),
+      value: item,
+    );
   }
 
-  Widget _editText(BuildContext context, {@required String text}) {
+  Widget _productNameInputForm(BuildContext context, {@required String text}) {
     return TextFormField(
+      controller: _pNameController,
       decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(left: 16.0, right: 16.0),
           labelText: text,
@@ -110,5 +114,36 @@ class _ProductsBottomSheetItemsState extends State<ProductsBottomSheetItems> {
             borderRadius: BorderRadius.circular(16.0),
           )),
     );
+  }
+
+  Widget _productPriceInputForm(BuildContext context, {@required String text}) {
+    return TextFormField(
+      controller: _pPriceController,
+      decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(left: 16.0, right: 16.0),
+          labelText: text,
+          hintText: text,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          )),
+    );
+  }
+
+  Future<void> _saveProducts(
+      BuildContext context, VoidCallback callback) async {
+    final productsProvider =
+        Provider.of<ProductsProvider>(context, listen: false);
+
+    if (_pNameController.text.isNotEmpty &&
+        _pPriceController.text.isNotEmpty &&
+        _dropDownValue != null) {
+      ProductsModel products = new ProductsModel(
+          categoryName: _dropDownValue,
+          productName: _pNameController.text,
+          productPrice: _pPriceController.text);
+      await productsProvider.insert(products);
+      callback.call();
+      Navigator.pop(context);
+    }
   }
 }

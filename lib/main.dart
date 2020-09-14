@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:products_app/providers/category_provider.dart';
 import 'package:products_app/providers/drawer_provider.dart';
+import 'package:products_app/providers/products_provider.dart';
 import 'package:products_app/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'export.dart';
@@ -19,6 +20,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => CategoryProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProductsProvider(),
         )
       ],
       child: MaterialApp(

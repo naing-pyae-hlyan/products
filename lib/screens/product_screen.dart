@@ -19,6 +19,8 @@ class BaseProductScreen extends StatelessWidget {
 }
 
 class ProductScreen extends StatelessWidget {
+  static List<CategoryModel> _categoryModelList;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +42,12 @@ class ProductScreen extends StatelessWidget {
         background:
             Image.asset('assets/images/products_image.jpg', fit: BoxFit.cover),
       ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.add_shopping_cart, color: Colors.white),
+          onPressed: (){},
+        )
+      ],
     );
   }
 
@@ -47,19 +55,24 @@ class ProductScreen extends StatelessWidget {
     final categoryProvider =
         Provider.of<CategoryProvider>(context, listen: false);
 
-    return FutureBuilder(
-      future: categoryProvider.category,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<CategoryModel>> snapshot) {
-        if (snapshot.hasError) {
-          return SliverToBoxAdapter(child: Container());
-        }
-        if (snapshot.hasData) {
-          if (snapshot.data is List<CategoryModel>) {
-            return _sliverListWidget(context, snapshot.data);
-          }
-        }
-        return SliverToBoxAdapter(child: Container());
+    return Consumer<RefreshProvider>(
+      builder: (context, refreshProvider, child) {
+        return FutureBuilder(
+          future: categoryProvider.category,
+          builder: (BuildContext context,
+              AsyncSnapshot<List<CategoryModel>> snapshot) {
+            if (snapshot.hasError) {
+              return SliverToBoxAdapter(child: Container());
+            }
+            if (snapshot.hasData) {
+              if (snapshot.data is List<CategoryModel>) {
+                _categoryModelList = snapshot.data;
+                return _sliverListWidget(context, snapshot.data);
+              }
+            }
+            return SliverToBoxAdapter(child: Container());
+          },
+        );
       },
     );
   }
@@ -75,7 +88,7 @@ class ProductScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _productsHeaderRow(context, categoryList, index),
-              ProductItems(),
+              ProductItems(categoryName: categoryList[index].categoryName),
             ],
           ),
         );
@@ -100,8 +113,13 @@ class ProductScreen extends StatelessWidget {
 
   Widget _fabAddProduct(BuildContext context) {
     return FloatingActionButton(
-      child: Icon(Icons.add, color: Colors.white),
-      onPressed: () => productsBottomSheet(context),
-    );
+        child: Icon(Icons.add, color: Colors.white),
+        onPressed: () {
+          productsBottomSheet(context,
+              categories: _categoryModelList,
+              callback: () =>
+                  Provider.of<RefreshProvider>(context, listen: false)
+                      .refresh());
+        });
   }
 }
