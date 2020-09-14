@@ -34,8 +34,8 @@ class ThemesColor {
     return _randomColor.randomColor(colorHue: ColorHue.blue);
   }
 
-  static String randomColorCode(Color color) {
-    MyColor _myColor = getColorNameFromColor(color);
-    return _myColor.getCode;
-  }
+  // static String randomColorCode(Color color) {
+  //   MyColor _myColor = getColorNameFromColor(color);
+  //   return _myColor.getCode;
+  // }
 }

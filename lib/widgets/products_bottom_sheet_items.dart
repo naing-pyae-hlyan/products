@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:products_app/export.dart';
+import 'package:products_app/providers/category_provider.dart';
+import 'package:provider/provider.dart';
 
 class ProductsBottomSheetItems extends StatefulWidget {
   @override
-  _ProductsBottomSheetItemsState createState() => _ProductsBottomSheetItemsState();
+  _ProductsBottomSheetItemsState createState() =>
+      _ProductsBottomSheetItemsState();
 }
 
 class _ProductsBottomSheetItemsState extends State<ProductsBottomSheetItems> {
@@ -26,7 +29,7 @@ class _ProductsBottomSheetItemsState extends State<ProductsBottomSheetItems> {
                 fontSize: TextUtils.headerText),
           ),
           SizedBox(height: 16.0),
-          _dropDownCategory(context),
+          _futureDropDown(context),
           SizedBox(height: 16.0),
           _editText(context, text: 'Product Name'),
           SizedBox(height: 16.0),
@@ -41,16 +44,30 @@ class _ProductsBottomSheetItemsState extends State<ProductsBottomSheetItems> {
     );
   }
 
-  Widget _dropDownCategory(BuildContext context) {
-    List<CategoryModel> categoryList = List<CategoryModel>();
+  Widget _futureDropDown(BuildContext context) {
+    final categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
+    return FutureBuilder(
+      future: categoryProvider.category,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<CategoryModel>> snapshot) {
+        if (snapshot.hasError) {
+          return Container();
+        }
+        if (snapshot.hasData) {
+          if (snapshot.data is List<CategoryModel>) {
+            return _dropDownCategory(context, snapshot.data);
+          }
+        }
+        return Container();
+      },
+    );
+  }
 
-    for (int i = 0; i < 4; i++) {
-      CategoryModel category = CategoryModel(categoryName: 'Category ${i + 1}');
-      categoryList.add(category);
-    }
-
+  Widget _dropDownCategory(
+      BuildContext context, List<CategoryModel> categoryList) {
     return Container(
-      padding:  const EdgeInsets.only(left: 16.0, right: 16.0),
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(16.0),
@@ -73,7 +90,16 @@ class _ProductsBottomSheetItemsState extends State<ProductsBottomSheetItems> {
     List<DropdownMenuItem<CategoryModel>> widget = List();
     for (CategoryModel item in items) {
       widget.add(DropdownMenuItem(
-        child: Text(item.categoryName, style: TextStyle(color: Colors.grey[700])),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(item.categoryName, style: TextStyle(color: Colors.grey[700])),
+            CircleAvatar(
+              radius: 12,
+              backgroundColor: ThemesColor.colorConvert(item.categoryColor),
+            ),
+          ],
+        ),
         value: item,
       ));
     }
