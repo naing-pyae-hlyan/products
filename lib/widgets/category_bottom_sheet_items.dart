@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:products_app/data/category_table.dart';
 import 'package:products_app/export.dart';
+import 'package:products_app/providers/refresh_provider.dart';
+import 'package:provider/provider.dart';
 
 class CategoryBottomSheetItems extends StatefulWidget {
   final VoidCallback callback;
@@ -14,7 +16,7 @@ class CategoryBottomSheetItems extends StatefulWidget {
 
 class _CategoryBottomSheetItemsState extends State<CategoryBottomSheetItems> {
   final _controller = TextEditingController();
-  final Color _randomColor = ThemesColor.randomColor();
+  Color _randomColor = ThemesColor.randomColor();
 
   @override
   void setState(fn) {
@@ -29,25 +31,33 @@ class _CategoryBottomSheetItemsState extends State<CategoryBottomSheetItems> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(64.0)),
-          color: Colors.white),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 16.0),
-          _categoryHeader(context),
-          SizedBox(height: 16.0),
-          _categoryInput(context, text: 'Category Name'),
-          SizedBox(height: 16.0),
-          roundButton(context, text: 'Save Category', onPress: () {
-            _saveCategory(context, widget.callback);
-            // widget.callback.call();
-          }),
-          SizedBox(height: 16.0),
-        ],
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => RefreshProvider(),
+        )
+      ],
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+            borderRadius:
+                const BorderRadius.only(topLeft: Radius.circular(64.0)),
+            color: Colors.white),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 16.0),
+            _categoryHeader(context),
+            SizedBox(height: 16.0),
+            _categoryInput(context, text: 'Category Name'),
+            SizedBox(height: 16.0),
+            roundButton(context, text: 'Save Category', onPress: () {
+              _saveCategory(context, widget.callback);
+              // widget.callback.call();
+            }),
+            SizedBox(height: 16.0),
+          ],
+        ),
       ),
     );
   }
@@ -61,9 +71,17 @@ class _CategoryBottomSheetItemsState extends State<CategoryBottomSheetItems> {
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: TextUtils.headerText)),
-        CircleAvatar(
-          backgroundColor: _randomColor,
-        )
+        Consumer<RefreshProvider>(builder: (context, refreshProvider, child) {
+          return InkWell(
+            child: CircleAvatar(
+              backgroundColor: _randomColor,
+            ),
+            onTap: () {
+              _randomColor = ThemesColor.randomColor();
+              refreshProvider.refresh();
+            },
+          );
+        })
       ],
     );
   }
