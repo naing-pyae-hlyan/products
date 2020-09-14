@@ -42,27 +42,54 @@ class ProductScreen extends StatelessWidget {
     );
   }
 
-  Widget _fabAddProduct(BuildContext context) {
-    return FloatingActionButton(
-      child: Icon(Icons.add, color: Colors.white),
-      onPressed: () => productsBottomSheet(context),
-    );
-  }
-
   Widget _sliverListWidget(BuildContext context) {
     List<ProductsModel> products = new List<ProductsModel>();
-
     for (int i = 0; i < 12; i++) {
       ProductsModel product =
           ProductsModel(productName: 'A$i', productPrice: '$i.00');
       products.add(product);
     }
 
-    return new SliverList(
+    // return SliverList(
+    //   delegate: SliverChildListDelegate(
+    //     [
+    //       ProductItems(),
+    //       ProductItems(),
+    //       ProductItems(),
+    //       ProductItems(),
+    //       ProductItems(),
+    //     ]
+    //   ),
+    // );
+    return SliverList(
       delegate:
           new SliverChildBuilderDelegate((BuildContext context, int index) {
-        return _listTiles(context, products, index);
-      }, childCount: products.length),
+            return ProductItems();
+            // return _productsListHorizontal(context, products);
+       // return _listTiles(context, products, index);
+      }, childCount: 5),
+    );
+  }
+
+  Widget _productsListHorizontal(
+      BuildContext context, List<ProductsModel> products) {
+    return Container(
+      height: 300,
+      child: Column(
+        children: [
+          Text('Products 1'),
+
+          // ListView.builder(
+          //   itemCount: 6,
+          //   itemBuilder: (context, position) {
+          //     return Container(
+          //       height: 200,
+          //       color: ThemesColor.randomColor(),
+          //     );
+          //   },
+          // ),
+        ],
+      ),
     );
   }
 
@@ -97,6 +124,13 @@ class ProductScreen extends StatelessWidget {
           print('${products[index].productName}');
         },
       ),
+    );
+  }
+
+  Widget _fabAddProduct(BuildContext context) {
+    return FloatingActionButton(
+      child: Icon(Icons.add, color: Colors.white),
+      onPressed: () => productsBottomSheet(context),
     );
   }
 }
