@@ -3,6 +3,7 @@ export 'package:products_app/screens/product_screen.dart';
 export 'package:products_app/screens/drawer_screen.dart';
 export 'package:products_app/screens/category_screen.dart';
 export 'package:products_app/screens/home_screen.dart';
+export 'package:products_app/screens/product_item_detail_screen.dart';
 
 // models
 export 'package:products_app/models/category_model.dart';

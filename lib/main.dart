@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:products_app/providers/cart_badge_provider.dart';
 import 'package:products_app/providers/category_provider.dart';
 import 'package:products_app/providers/drawer_provider.dart';
 import 'package:products_app/providers/products_provider.dart';
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => ProductsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => CartBadgeProvider(badge: 0),
         )
       ],
       child: MaterialApp(

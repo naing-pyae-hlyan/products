@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:products_app/export.dart';
+import 'package:products_app/providers/cart_badge_provider.dart';
 import 'package:products_app/providers/category_provider.dart';
 import 'package:products_app/providers/refresh_provider.dart';
+import 'package:products_app/widgets/cart_button_with_badge.dart';
 import 'package:provider/provider.dart';
 
 class BaseProductScreen extends StatelessWidget {
@@ -43,10 +45,11 @@ class ProductScreen extends StatelessWidget {
             Image.asset('assets/images/products_image.jpg', fit: BoxFit.cover),
       ),
       actions: [
-        IconButton(
-          icon: Icon(Icons.add_shopping_cart, color: Colors.white),
-          onPressed: (){},
-        )
+        Consumer<CartBadgeProvider>(
+          builder: (context, badgeProvider, child) {
+            return cartButtonWithBadge(context, badge: badgeProvider.badge);
+          },
+        ),
       ],
     );
   }
