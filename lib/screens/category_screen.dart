@@ -51,7 +51,6 @@ class CategoryScreen extends StatelessWidget {
           }
 
           if (snapshot.hasData) {
-            // List<CategoryModel> categoryList = List();
             if (snapshot.data is List<CategoryModel>) {
               return SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -86,7 +85,8 @@ class CategoryScreen extends StatelessWidget {
           children: [
             SizedBox(height: 8.0),
             CircleAvatar(
-              backgroundColor: ThemesColor.randomColor(),
+              backgroundColor:
+                  ThemesColor.colorConvert(category[index].categoryColor),
               radius: 32,
             ),
             SizedBox(height: 8.0),

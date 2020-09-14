@@ -12,14 +12,17 @@ class DrawerScreen extends StatelessWidget {
       elevation: 0,
       child: ListView(
         children: [
-          DrawerHeader(
-            decoration: BoxDecoration(color: ThemesColor.primaryColor,
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: ExactAssetImage('assets/images/drawer_image.jpg')
-            )),
-            child: Container(),
-          ),
+           Placeholder(
+             fallbackHeight: 150,
+           ),
+          // DrawerHeader(
+          //   decoration: BoxDecoration(color: ThemesColor.primaryColor,
+          //   image: DecorationImage(
+          //     fit: BoxFit.cover,
+          //     image: ExactAssetImage('assets/images/drawer_image.jpg')
+          //   )),
+          //   child: Container(),
+          // ),
           ListTile(
             title: Text('Products'),
             leading: Icon(Icons.add_shopping_cart),

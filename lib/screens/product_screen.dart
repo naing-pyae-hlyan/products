@@ -3,7 +3,6 @@ import 'package:products_app/export.dart';
 import 'package:products_app/providers/refresh_provider.dart';
 import 'package:provider/provider.dart';
 
-
 class BaseProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -26,6 +25,8 @@ class ProductScreen extends StatelessWidget {
         slivers: <Widget>[_sliverAppBar(context), _sliverListWidget(context)],
       ),
       drawer: DrawerScreen(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: _fabAddProduct(context),
     );
   }
 
@@ -38,14 +39,13 @@ class ProductScreen extends StatelessWidget {
         background:
             Image.asset('assets/images/products_image.jpg', fit: BoxFit.cover),
       ),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.add, color: Colors.white),
-          onPressed: () {
-            productsBottomSheet(context);
-          },
-        )
-      ],
+    );
+  }
+
+  Widget _fabAddProduct(BuildContext context) {
+    return FloatingActionButton(
+      child: Icon(Icons.add, color: Colors.white),
+      onPressed: () => productsBottomSheet(context),
     );
   }
 
@@ -53,7 +53,8 @@ class ProductScreen extends StatelessWidget {
     List<ProductsModel> products = new List<ProductsModel>();
 
     for (int i = 0; i < 12; i++) {
-      ProductsModel product = ProductsModel(productName: 'A$i', productPrice: '$i.00');
+      ProductsModel product =
+          ProductsModel(productName: 'A$i', productPrice: '$i.00');
       products.add(product);
     }
 
@@ -65,7 +66,8 @@ class ProductScreen extends StatelessWidget {
     );
   }
 
-  Widget _listTiles(BuildContext context, List<ProductsModel> products, int index) {
+  Widget _listTiles(
+      BuildContext context, List<ProductsModel> products, int index) {
     return Card(
       margin: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
       shadowColor: Colors.grey[200],

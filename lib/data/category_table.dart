@@ -5,13 +5,15 @@ import 'package:sqflite/sqflite.dart';
 const TABLE_NAME = 'category_table';
 const CATEGORY_ID = 'category_id';
 const CATEGORY_NAME = 'category_name';
+const CATEGORY_COLOR = 'category_color';
 
 class CategoryTable {
   static Future<void> onCreate(Database db) async {
     await db.execute(
       'CREATE TABLE $TABLE_NAME('
       '$CATEGORY_ID INTEGER PRIMARY KEY AUTOINCREMENT,'
-      '$CATEGORY_NAME TEXT'
+      '$CATEGORY_NAME TEXT,'
+      '$CATEGORY_COLOR TEXT'
       ')',
     );
   }
@@ -36,7 +38,9 @@ class CategoryTable {
 
     // Convert the list<Map<String, dynamic>> into List<Category>.
     return List.generate(maps.length, (i) {
-      return CategoryModel(categoryName: maps[i][CATEGORY_NAME]);
+      return CategoryModel(
+          categoryName: maps[i][CATEGORY_NAME],
+          categoryColor: maps[i][CATEGORY_COLOR]);
     });
   }
 

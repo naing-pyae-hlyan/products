@@ -1,6 +1,5 @@
 import 'package:path/path.dart';
 import 'package:products_app/data/category_table.dart';
-import 'package:products_app/export.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {

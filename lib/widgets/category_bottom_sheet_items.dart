@@ -14,6 +14,7 @@ class CategoryBottomSheetItems extends StatefulWidget {
 
 class _CategoryBottomSheetItemsState extends State<CategoryBottomSheetItems> {
   final _controller = TextEditingController();
+  final Color _randomColor = ThemesColor.randomColor();
 
   @override
   void setState(fn) {
@@ -37,11 +38,7 @@ class _CategoryBottomSheetItemsState extends State<CategoryBottomSheetItems> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 16.0),
-          Text('Add Category',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: TextUtils.headerText)),
+          _categoryHeader(context),
           SizedBox(height: 16.0),
           _categoryInput(context, text: 'Category Name'),
           SizedBox(height: 16.0),
@@ -52,6 +49,22 @@ class _CategoryBottomSheetItemsState extends State<CategoryBottomSheetItems> {
           SizedBox(height: 16.0),
         ],
       ),
+    );
+  }
+
+  Widget _categoryHeader(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text('Add Category',
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: TextUtils.headerText)),
+        CircleAvatar(
+          backgroundColor: _randomColor,
+        )
+      ],
     );
   }
 
@@ -69,10 +82,12 @@ class _CategoryBottomSheetItemsState extends State<CategoryBottomSheetItems> {
     );
   }
 
-  Future<void> _saveCategory(BuildContext context, VoidCallback callback) async {
-    if(_controller.text.isNotEmpty) {
+  Future<void> _saveCategory(
+      BuildContext context, VoidCallback callback) async {
+    if (_controller.text.isNotEmpty) {
       CategoryModel category = new CategoryModel(
-          categoryName: _controller.text);
+          categoryName: _controller.text,
+          categoryColor: '${_randomColor.value.toRadixString(16)}');
       await CategoryTable.insert(category);
       callback.call();
       Navigator.pop(context);
