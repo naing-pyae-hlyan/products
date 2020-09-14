@@ -19,6 +19,7 @@ export 'package:products_app/widgets/products_bottom_sheet.dart';
 export 'package:products_app/widgets/products_bottom_sheet_items.dart';
 export 'package:products_app/widgets/products_items.dart';
 export 'package:products_app/widgets/round_button.dart';
+export 'package:products_app/widgets/custom_text.dart';
 
 // enum
 export 'package:products_app/enum/app_enum.dart';

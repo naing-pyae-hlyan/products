@@ -49,81 +49,20 @@ class ProductScreen extends StatelessWidget {
           ProductsModel(productName: 'A$i', productPrice: '$i.00');
       products.add(product);
     }
-
-    // return SliverList(
-    //   delegate: SliverChildListDelegate(
-    //     [
-    //       ProductItems(),
-    //       ProductItems(),
-    //       ProductItems(),
-    //       ProductItems(),
-    //       ProductItems(),
-    //     ]
-    //   ),
-    // );
     return SliverList(
       delegate:
           new SliverChildBuilderDelegate((BuildContext context, int index) {
-            return ProductItems();
-            // return _productsListHorizontal(context, products);
-       // return _listTiles(context, products, index);
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomText.headerText('Product 1', color: Colors.grey),
+                  ProductItems(),
+                ],
+              ),
+            );
       }, childCount: 5),
-    );
-  }
-
-  Widget _productsListHorizontal(
-      BuildContext context, List<ProductsModel> products) {
-    return Container(
-      height: 300,
-      child: Column(
-        children: [
-          Text('Products 1'),
-
-          // ListView.builder(
-          //   itemCount: 6,
-          //   itemBuilder: (context, position) {
-          //     return Container(
-          //       height: 200,
-          //       color: ThemesColor.randomColor(),
-          //     );
-          //   },
-          // ),
-        ],
-      ),
-    );
-  }
-
-  Widget _listTiles(
-      BuildContext context, List<ProductsModel> products, int index) {
-    return Card(
-      margin: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
-      shadowColor: Colors.grey[200],
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.blue,
-          child: Text('${products[index].productName[0]}'.toUpperCase(),
-              style: TextStyle(
-                  color: Colors.white, fontSize: TextUtils.titleText)),
-        ),
-        title: Text(
-          products[index].productName,
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: TextUtils.titleText),
-        ),
-        trailing: Text(
-          products[index].productPrice,
-          style: TextStyle(color: Colors.grey, fontSize: TextUtils.contextText),
-        ),
-        onTap: () {
-          // TODO show items details
-          print('${products[index].productName}');
-        },
-      ),
     );
   }
 

@@ -21,13 +21,7 @@ class _ProductsBottomSheetItemsState extends State<ProductsBottomSheetItems> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 16.0),
-          Text(
-            'Add Product',
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: TextUtils.headerText),
-          ),
+          CustomText.headerText('Add Product'),
           SizedBox(height: 16.0),
           _futureDropDown(context),
           SizedBox(height: 16.0),

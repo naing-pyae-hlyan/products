@@ -66,11 +66,7 @@ class _CategoryBottomSheetItemsState extends State<CategoryBottomSheetItems> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('Add Category',
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: TextUtils.headerText)),
+        CustomText.headerText('Add Category'),
         Consumer<RefreshProvider>(builder: (context, refreshProvider, child) {
           return InkWell(
             child: CircleAvatar(
