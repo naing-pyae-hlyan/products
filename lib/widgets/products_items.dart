@@ -28,13 +28,16 @@ class ProductItems extends StatelessWidget {
             return _horizontalListBuilder(context, snapshot.data);
           }
         }
-        return Container();
+        return SizedBox();
       },
     );
   }
 
   Widget _horizontalListBuilder(
       BuildContext context, List<ProductsModel> productList) {
+    if(productList.isEmpty || productList == null) {
+      return SizedBox();
+    }
     return Container(
       height: MediaQuery.of(context).size.width / 3,
       child: ListView.builder(
@@ -83,8 +86,6 @@ class ProductItems extends StatelessWidget {
 
   Widget _listTileAddToCard(
       BuildContext context, List<ProductsModel> productList, int index) {
-    final badgeProvider =
-        Provider.of<CartBadgeProvider>(context, listen: false);
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
 
     return Row(
